@@ -21,9 +21,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${Pretendard.className} bg-[#f7f7f7] relative`}>
-        <Toaster position="top-center" richColors />
+        <Toaster position="bottom-center" richColors />
         <div className="w-full min-h-screen flex justify-center items-center relative">
-          <div className="w-full md:w-[375px] bg-white shadow-md">
+          <div className="w-full md:w-[393px] bg-white shadow-md">
             {children}
           </div>
         </div>
