@@ -40,7 +40,7 @@ const responses = [
   { id: 3, text: "난 투움바 파스타 싫어해.", emoji: "😕" },
   { id: 4, text: "안 궁금한데...", emoji: "😒" },
 ];
-export default function MissionPage({ params }: { params: { id: string } }) {
+export default function MissionScreen({ params }: { params: { id: string } }) {
   const [visibleSystemMessages, setVisibleSystemMessages] = useState<number[]>(
     []
   );

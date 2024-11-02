@@ -15,13 +15,16 @@
     "face-api.js": "^0.22.2",
     "framer-motion": "^11.11.8",
     "gsap": "^3.12.5",
+    "lucide-react": "^0.454.0",
     "next": "14.1.0",
+    "openai": "^4.69.0",
     "react": "^18",
     "react-dom": "^18",
     "sonner": "^1.5.0",
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

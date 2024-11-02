@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { cookies } from "next/headers";
+
+import OnboardingScreen from "./_sections/OnboardingSection";
 
 const Pretendard = localFont({
   src: "../public/fonts/PretendardVariable.woff2",
@@ -18,6 +21,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const onboardingComplete =
+    cookieStore.get("onboardingComplete")?.value === "true";
+
+  if (!onboardingComplete) {
+    return <OnboardingScreen />;
+  }
+
   return (
     <html lang="ko">
       <body className={`${Pretendard.className} bg-[#f7f7f7] relative`}>
