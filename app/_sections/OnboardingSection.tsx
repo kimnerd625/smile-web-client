@@ -11,27 +11,27 @@ const Pretendard = localFont({
 export default function OnboardingScreen() {
   const router = useRouter();
 
-  const handleOnboardingComplete = () => {
+  const handleOnboardingComplete = async () => {
     document.cookie = "onboardingComplete=true; path=/";
-    router.push("/");
+    await router.push("/home");
+    window.location.reload();
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       handleOnboardingComplete();
     }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <html lang="ko">
-      <body className={`${Pretendard.className} bg-[#f7f7f7] relative`}>
-        <div className="w-full min-h-screen flex justify-center items-center relative">
-          <div className="w-full min-h-screen md:w-[393px] bg-[#FF8C4A] shadow-md flex flex-col justify-center items-center">
-            <h2>😄💬</h2>
-            {/* <button onClick={handleOnboardingComplete}>Get Started</button> */}
-          </div>
-        </div>
-      </body>
-    </html>
+    <div
+      className={`${Pretendard.className} bg-[#f7f7f7] relative w-full min-h-screen flex justify-center items-center`}
+    >
+      <div className="w-full min-h-screen md:w-[393px] bg-[#FF8C4A] shadow-md flex flex-col justify-center items-center">
+        <h2>😄💬</h2>
+      </div>
+    </div>
   );
 }
