@@ -40,19 +40,22 @@ export default function HomeScreen() {
     { sender: "bot", text: "안녕하세요!" },
   ]);
   const [input, setInput] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null); // ref 생성
-  const inputRef = useRef<HTMLInputElement>(null); // input ref 생성
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    scrollToBottom(); // 메시지가 업데이트될 때마다 스크롤
+    if (isAutoScrollEnabled) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   useEffect(() => {
-    inputRef.current?.focus(); // 페이지 로드 시 input에 포커스
+    inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -95,11 +98,12 @@ export default function HomeScreen() {
       };
       setMessages((prev) => [...prev, errorMessage]);
     }
+
+    scrollToBottom(); // 메시지를 보낸 후 스크롤을 맨 아래로 이동
   };
 
   return (
     <main className="relative flex flex-col justify-start items-center w-full h-screen bg-gradient-to-b from-[#FFF6F3] to-[#FFE4D6] pt-3 pb-5 pl-7 pr-5">
-      {/* 아바타 섹션 */}
       <section className="absolute bottom-0 flex-1 overflow-y-hidden">
         <div className="relative w-[320px] h-[520px]">
           <Image
@@ -112,7 +116,7 @@ export default function HomeScreen() {
           />
         </div>
       </section>
-      {/* 친밀도 바 & 햄버거 섹션 */}
+
       <section className="w-full flex flex-row justify-between items-center gap-[18px]">
         <div className="relative flex-1 h-[18px] rounded-[40px] bg-[#FFF6F3] shadow-[0_0_4px_rgba(255,188,150,0.3),inset_0_0_3px_rgba(255,188,150,0.2),0_0_8px_rgba(255,188,150,0.2),0_0_20px_rgba(255,188,150,0.15),0_0_40px_rgba(255,188,150,0.1)]">
           <div className="w-16 h-full bg-[#FFBC96] rounded-[40px]"></div>
@@ -127,7 +131,7 @@ export default function HomeScreen() {
         </div>
         <HamburgerIcon width={34} height={34} />
       </section>
-      {/* 미션 버튼 섹션 */}
+
       <section className="mt-12 w-full flex flex-row justify-between items-center">
         <div
           onClick={handleEmotionButtonClick}
@@ -145,8 +149,20 @@ export default function HomeScreen() {
           <GoalIcon width={48} height={26} />
         </div>
       </section>
-      {/* 채팅 섹션 */}
-      <section className="flex flex-col py-4 space-y-4 overflow-y-auto justify-end flex-1 w-full mb-[36px] ">
+
+      <section
+        className="flex flex-col py-4 space-y-4 overflow-y-auto max-h-[calc(100vh-80px)] w-full mb-[36px]"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        <style jsx>{`
+          section::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
         <AnimatePresence>
           {messages.map((message, index) => (
             <motion.div
@@ -165,15 +181,14 @@ export default function HomeScreen() {
             </motion.div>
           ))}
         </AnimatePresence>
-        {/* 스크롤 포지션을 위한 빈 div */}
         <div ref={messagesEndRef} />
       </section>
-      {/* 채팅 입력 섹션 */}
+
       <section className="absolute bottom-0 w-full px-4 pb-5">
         <form className="relative w-full" onSubmit={handleSend}>
           <input
             type="text"
-            ref={inputRef} // input 요소에 ref 추가
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="메시지"
@@ -187,6 +202,7 @@ export default function HomeScreen() {
           </button>
         </form>
       </section>
+
       {isEmotionModalOpened && (
         <EmotionModal
           isDailyEmotionSuccess={isDailyEmotionSuccess}
