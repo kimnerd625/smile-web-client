@@ -3,7 +3,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import React, { useEffect, useState } from "react";
-import { Object3D, Euler } from "three";
+import { Object3D, Euler, Color } from "three";
 
 export default function Avatar({
   url,
@@ -27,6 +27,12 @@ export default function Avatar({
     if (nodes.Wolf3D_Head_Custom) meshes.push(nodes.Wolf3D_Head_Custom);
     setHeadMeshes(meshes);
   }, [nodes, url]);
+
+  scene.traverse((obj: any) => {
+    if (obj.isMesh) {
+      obj.material.color = new Color(1.2, 1.2, 1.2);
+    }
+  });
 
   useFrame(() => {
     if (blendshapes.length > 0) {
@@ -59,10 +65,6 @@ export default function Avatar({
   });
 
   return (
-    <primitive
-      object={scene}
-      position={[0, -2.8, 3]}
-      scale={[1.75, 1.75, 1.75]}
-    />
+    <primitive object={scene} position={[0, -4.8, 3]} scale={[3.6, 3.6, 3.6]} />
   );
 }

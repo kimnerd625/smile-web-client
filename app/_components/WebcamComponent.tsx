@@ -13,7 +13,7 @@ import * as faceapi from "face-api.js";
 import { loadFaceApiModels } from "@/app/utils/faceApi";
 
 const defaultAvatarUrl =
-  "https://models.readyplayer.me/670883a593828dcb385cad2e.glb?morphTargets=ARKit&textureAtlas=1024";
+  "https://models.readyplayer.me/66af16194d3eefd8c86cc4b2.glb?morphTargets=ARKit&textureAtlas=1024";
 
 const options: FaceLandmarkerOptions = {
   baseOptions: {
@@ -145,7 +145,7 @@ export default function WebcamComponent({
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100">
+    <div className="flex flex-col items-center justify-center">
       <video
         ref={videoRef}
         id="video"
@@ -155,31 +155,30 @@ export default function WebcamComponent({
       />
 
       <Canvas
-        className="border"
         style={{ height: 240, width: "100%" }}
-        camera={{ fov: 30 }}
+        camera={{ fov: 60, position: [0, 1, 5] }}
       >
-        <ambientLight intensity={1} />
+        <ambientLight intensity={1.5} />
         <pointLight
           position={[10, 10, 10]}
           color={new Color(1, 1, 0)}
-          intensity={1.5}
+          intensity={1.75}
         />
         <pointLight
           position={[-10, 0, 10]}
           color={new Color(1, 0, 0)}
-          intensity={1.5}
+          intensity={1.75}
         />
-        <pointLight position={[0, 0, 10]} intensity={1.2} />
+        <pointLight position={[0, 0, 10]} intensity={1.75} />
         <Avatar
           url={defaultAvatarUrl}
           blendshapes={blendshapes}
           rotation={rotation}
         />
       </Canvas>
-      <div className="text-[14px]">
+      {/* <div className="text-[14px]">
         Current Expression: {expression} (Score: {expressionScore.toFixed(2)})
-      </div>
+      </div> */}
     </div>
   );
 }
