@@ -39,6 +39,7 @@ export default function WebcamComponent({
   const [expressionScore, setExpressionScore] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [happyCount, setHappyCount] = useState(0);
+  const animationFrameIdRef = useRef<number | null>(null); // animationFrame ID 저장
 
   const setup = async () => {
     const filesetResolver = await FilesetResolver.forVisionTasks(
@@ -100,7 +101,7 @@ export default function WebcamComponent({
         }
       }
 
-      requestAnimationFrame(() => detect());
+      animationFrameIdRef.current = requestAnimationFrame(detect);
     };
 
     detect();
@@ -113,7 +114,7 @@ export default function WebcamComponent({
   }, [happyCount]);
 
   const predict = async (faceLandmarker: FaceLandmarker) => {
-    let nowInMs = Date.now();
+    const nowInMs = Date.now();
     const video = videoRef.current;
 
     if (video && lastVideoTime !== video.currentTime) {
@@ -137,11 +138,19 @@ export default function WebcamComponent({
       }
     }
 
-    window.requestAnimationFrame(() => predict(faceLandmarker));
+    animationFrameIdRef.current = window.requestAnimationFrame(() =>
+      predict(faceLandmarker)
+    );
   };
 
   useEffect(() => {
     setup(); // 시작 시 캠 설정 및 감지 시작
+
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current); // 컴포넌트 언마운트 시 반복 작업 정리
+      }
+    };
   }, []);
 
   return (
@@ -176,9 +185,6 @@ export default function WebcamComponent({
           rotation={rotation}
         />
       </Canvas>
-      {/* <div className="text-[14px]">
-        Current Expression: {expression} (Score: {expressionScore.toFixed(2)})
-      </div> */}
     </div>
   );
 }
