@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect, useRef } from "react";
@@ -22,6 +22,7 @@ type Message = {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleEmotionButtonClick = () => {
     setIsEmotionModalOpened(true);
@@ -36,13 +37,18 @@ export default function HomeScreen() {
     useState<boolean>(false);
   const [isDailyEmotionSuccess, setIsDailyEmotionSuccess] =
     useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { sender: "bot", text: "안녕하세요!" },
-  ]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
+
+  // 쿼리 파라미터에 메시지가 있는지 확인
+  const initialMessage = searchParams.get("message");
+  const [messages, setMessages] = useState<Message[]>(
+    initialMessage
+      ? [{ sender: "bot", text: initialMessage }]
+      : [{ sender: "bot", text: "안녕하세요!" }]
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

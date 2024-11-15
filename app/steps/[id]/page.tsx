@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,6 +42,8 @@ const responses = [
   { id: 4, text: "안 궁금한데...", emoji: "😒" },
 ];
 export default function MissionScreen({ params }: { params: { id: string } }) {
+  const router = useRouter(); // useRouter 초기화
+
   const [visibleSystemMessages, setVisibleSystemMessages] = useState<number[]>(
     []
   );
@@ -97,6 +100,18 @@ export default function MissionScreen({ params }: { params: { id: string } }) {
       }, 1000); // 모달 닫힌 후 1초 후에 새로운 메시지 애니메이션
     }
   }, [isSuccess]);
+
+  // additionalMessage 상태가 true일 때 /로 이동하는 useEffect 추가
+  useEffect(() => {
+    if (additionalMessage) {
+      setTimeout(() => {
+        const message = encodeURIComponent(
+          "지민이와의 대화에 제가 적절한 표정을 지을 수 있게 도와줘서 정말 고마워요!"
+        );
+        router.push(`/?message=${message}`);
+      }, 2000); // 2초 후에 /로 이동
+    }
+  }, [additionalMessage, router]);
 
   // handleResponseClick : 응답 버튼 클릭 시 이모지와 함께 모달 표시
   const handleResponseClick = (id: number, emoji: string) => {
