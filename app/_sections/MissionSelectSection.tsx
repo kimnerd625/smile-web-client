@@ -6,11 +6,10 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function MissionSelectSection() {
   const router = useRouter();
-  const steps = Array.from({ length: 15 }, (_, i) => i + 1);
+  const steps = Array.from({ length: 1 }, (_, i) => i + 1);
 
   const handleStepClick = (step: number) => {
     console.log(`${step}단계가 클릭되었습니다.`);
-    // 클릭 시 해당 단계로 이동하도록 설정
     router.push(`/steps/${step}`);
   };
 
@@ -26,11 +25,12 @@ export default function MissionSelectSection() {
               border-2 border-[#FFBC96] rounded-[12px] font-bold
               transition-all duration-200 ease-in-out"
               style={{
-                width: "84px",
-                height: "40px",
+                width: "120px",
+                height: "48px",
               }}
             >
-              {step}
+              {/* {step} */}
+              시작하기
             </button>
           ))}
         </div>
